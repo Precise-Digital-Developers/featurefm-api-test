@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-"""Feature.fm API Test Suite.
+"""Feature.fm API Testing.
 
-Complete API testing framework for Feature.fm music marketing platform.
 """
 
 from __future__ import annotations
@@ -66,6 +65,8 @@ class FeatureFMAPITester:
         self.base_url = "https://api.feature.fm"
         self.marketing_base = f"{self.base_url}/v2"
         self.manage_base = f"{self.base_url}/manage/v1"
+        # Sandbox might use simplified endpoints without /manage/v1
+        self.sandbox_mode = True  # Set to True for sandbox testing
 
         # Session for connection pooling
         self.session = requests.Session()
@@ -160,12 +161,12 @@ class FeatureFMAPITester:
         return f"{timestamp}.{signature}"
 
     def _print_status(self, message: str, status: TestStatus | None = None, indent: int = 0) -> None:
-        """Print colored status message.
+        """Print status message.
 
         Args:
         ----
             message: Message to print
-            status: Status type for coloring
+            status: Status type
             indent: Indentation level
         """
         if not self.verbose:
@@ -367,12 +368,12 @@ class FeatureFMAPITester:
                 for artist in artists[:3]:  # Show first 3
                     if isinstance(artist, dict):
                         self._print_status(
-                            f"Artist: {artist.get('name', 'Unknown')} (ID: {artist.get('id')})",
+                            f"Artist: {artist.get('artistName', 'Unknown')} (ID: {artist.get('id')})",
                             indent=2,
                         )
                         if not self.test_data["artist_id"]:
                             self.test_data["artist_id"] = artist.get("id")
-                            self.test_data["artist_name"] = artist.get("name")
+                            self.test_data["artist_name"] = artist.get("artistName")
             else:
                 self._print_status("No artists found or unexpected format", TestStatus.WARNING, 1)
 
@@ -389,24 +390,22 @@ class FeatureFMAPITester:
         self._print_status("\n[TEST] Create Artist", indent=0)
 
         artist_data = {
-            "name": f'Test Artist {datetime.now().strftime("%Y%m%d_%H%M%S")}',
-            "bio": "Created via Feature.fm API test suite",
-            "genres": ["electronic", "pop"],
-            "links": {
-                "spotify": "https://open.spotify.com/artist/test",
-                "instagram": "https://instagram.com/testartist",
-                "website": "https://testartist.com",
-            },
-            "image_url": "https://via.placeholder.com/500",
-            "country": "US",
+            "artistName": f'Test Artist {datetime.now().strftime("%Y%m%d_%H%M%S")}',
+            "type": "artist",  # Required: "artist" or "band"
+            "countryCode": "US",  # Required: ISO 3166-1 alpha-2
+            "shortBio": "Created via Feature.fm API test suite",
+            "artistImage": "https://via.placeholder.com/500",
+            "websiteUrl": "https://testartist.com",
+            "spotifyArtistUrl": "https://open.spotify.com/artist/test",
+            "tags": ["electronic", "pop"],
         }
 
-        success, response = self._make_request("/artists", method="POST", data=artist_data)
+        success, response = self._make_request("/artist", method="POST", data=artist_data)
 
         if success:
             if response["data"] and isinstance(response["data"], dict):
                 artist_id = response["data"].get("id")
-                artist_name = response["data"].get("name", artist_data["name"])
+                artist_name = response["data"].get("artistName", artist_data["artistName"])
                 self._print_status(f"Artist created: {artist_name} (ID: {artist_id})",
                                  TestStatus.PASSED, 1)
                 self.test_data["artist_id"] = artist_id
@@ -434,11 +433,11 @@ class FeatureFMAPITester:
                             {"reason": "No artist ID"})
             return False
 
-        success, response = self._make_request(f'/artists/{self.test_data["artist_id"]}')
+        success, response = self._make_request(f'/artist/{self.test_data["artist_id"]}')
 
         if success:
             artist = response["data"]
-            self._print_status(f"Retrieved artist: {artist.get('name', 'Unknown')}",
+            self._print_status(f"Retrieved artist: {artist.get('artistName', 'Unknown')}",
                              TestStatus.PASSED, 1)
             self._print_status(f"Genres: {', '.join(artist.get('genres', []))}", indent=2)
             self._print_status(f"Country: {artist.get('country', 'N/A')}", indent=2)
@@ -459,28 +458,36 @@ class FeatureFMAPITester:
             # Try to create without artist ID (some APIs allow this)
             self._print_status("No artist ID - attempting standalone creation", indent=1)
 
+        # Skip if no artist ID - smartlinks require artistId
+        if not self.test_data.get("artist_id"):
+            self._print_status("Skipping - No artist ID available", TestStatus.SKIPPED, 1)
+            self._record_test("create_smartlink", TestStatus.SKIPPED, {"reason": "No artist ID"})
+            return False
+
         link_data = {
+            "artistId": self.test_data["artist_id"],  # Required
+            "shortId": f"test-{int(time.time())}",  # Required: unique short ID
+            "domain": "https://ffm.to",  # Must be valid URI
             "title": f"Test Release {int(time.time())}",
-            "artist_name": self.test_data.get("artist_name", "Test Artist"),
-            "type": "track",  # track, album, or playlist
-            "release_date": (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d"),
-            "urls": {
-                "spotify": "https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp",
-                "appleMusic": "https://music.apple.com/us/album/test/123456789",
-                "youtube": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-                "soundcloud": "https://soundcloud.com/test/track",
-            },
-            "metadata": {
-                "isrc": f"TEST{int(time.time())}",
-                "label": "Test Records",
-                "genre": "Electronic",
-            },
+            "image": "https://via.placeholder.com/500",
+            "description": "Test smartlink created via API",
+            "stores": [
+                {
+                    "storeId": "spotify",
+                    "url": "https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp"
+                },
+                {
+                    "storeId": "apple",
+                    "url": "https://music.apple.com/us/album/test/123456789"
+                },
+                {
+                    "storeId": "youtube",
+                    "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                }
+            ]
         }
 
-        if self.test_data.get("artist_id"):
-            link_data["artist_id"] = self.test_data["artist_id"]
-
-        success, response = self._make_request("/smartlinks", method="POST", data=link_data)
+        success, response = self._make_request("/smartlink", method="POST", data=link_data)
 
         if success:
             smartlink = response["data"]
@@ -542,9 +549,9 @@ class FeatureFMAPITester:
 
         # Try different analytics endpoints
         analytics_endpoints = [
-            f'/smartlinks/{self.test_data["smartlink_id"]}/analytics',
-            f'/analytics/smartlinks/{self.test_data["smartlink_id"]}',
-            f'/smartlinks/{self.test_data["smartlink_id"]}/stats',
+            f'/smartlink/{self.test_data["smartlink_id"]}/analytics',
+            f'/analytics/smartlink/{self.test_data["smartlink_id"]}',
+            f'/smartlink/{self.test_data["smartlink_id"]}/stats',
         ]
 
         success = False
@@ -583,37 +590,44 @@ class FeatureFMAPITester:
         """Test creating a pre-save campaign."""
         self._print_status("\n[TEST] Create Pre-Save Campaign", indent=0)
 
+        # Skip if no artist ID - pre-save requires artistId
+        if not self.test_data.get("artist_id"):
+            self._print_status("Skipping - No artist ID available", TestStatus.SKIPPED, 1)
+            self._record_test("create_presave", TestStatus.SKIPPED, {"reason": "No artist ID"})
+            return False
+
         campaign_data = {
+            "artistId": self.test_data["artist_id"],  # Required
+            "releaseDate": (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d"),  # Required
+            "timezone": "America/New_York",  # Required
+            "shortId": f"presave-{int(time.time())}",  # Required
+            "domain": "https://ffm.to",  # Must be valid URI
             "title": f'Pre-Save Campaign {datetime.now().strftime("%Y%m%d")}',
-            "artist_name": self.test_data.get("artist_name", "Test Artist"),
-            "release_date": (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d"),
-            "release_title": "Upcoming Album",
-            "platforms": ["spotify", "appleMusic", "deezer"],
-            "artwork_url": "https://via.placeholder.com/500",
-            "incentive": {
-                "enabled": True,
-                "description": "Get exclusive content for pre-saving!",
-                "type": "download",
-            },
-            "metadata": {
-                "genre": "Electronic",
-                "label": "Test Records",
-                "track_count": 10,
-            },
+            "image": "https://via.placeholder.com/500",
+            "stores": [
+                {
+                    "storeId": "spotify",
+                    "url": "https://open.spotify.com/album/test"
+                },
+                {
+                    "storeId": "apple",
+                    "url": "https://music.apple.com/album/test"
+                }
+            ],
+            "preSaveFollow": [
+                {
+                    "storeId": "spotify",
+                    "entities": [
+                        {
+                            "url": "https://open.spotify.com/artist/test"
+                        }
+                    ]
+                }
+            ],
         }
 
-        if self.test_data.get("artist_id"):
-            campaign_data["artist_id"] = self.test_data["artist_id"]
-
-        # Try different endpoints for pre-save campaigns
-        endpoints = ["/campaigns/presave", "/presaves", "/campaigns"]
-
-        success = False
-        response: dict[str, Any] = {}
-        for endpoint in endpoints:
-            success, response = self._make_request(endpoint, method="POST", data=campaign_data)
-            if success or response.get("status_code") != 404:
-                break
+        # Pre-save campaigns use the smartlink/pre-save endpoint
+        success, response = self._make_request("/smartlink/pre-save", method="POST", data=campaign_data)
 
         if success:
             campaign = response["data"]
@@ -716,15 +730,8 @@ class FeatureFMAPITester:
         if self.test_data.get("artist_id"):
             page_data["artist_id"] = self.test_data["artist_id"]
 
-        # Try different endpoints
-        endpoints = ["/actionpages", "/action-pages", "/pages/action"]
-
-        success = False
-        response: dict[str, Any] = {}
-        for endpoint in endpoints:
-            success, response = self._make_request(endpoint, method="POST", data=page_data)
-            if success or response.get("status_code") != 404:
-                break
+        # Action pages use singular endpoint for creation
+        success, response = self._make_request("/actionpage", method="POST", data=page_data)
 
         if success:
             page = response["data"]

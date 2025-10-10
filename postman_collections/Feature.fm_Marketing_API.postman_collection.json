@@ -1,0 +1,474 @@
+{
+  "info": {
+    "name": "Feature.fm Marketing API",
+    "description": "Feature.fm Marketing API collection for managing artists, smartlinks, pre-save campaigns, and action pages. Includes both sandbox and production environment configurations.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "featurefm-marketing-api-v2",
+    "version": "2.0.0"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Test API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Authentication successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('data');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/artists",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "artists"]
+            },
+            "description": "Test API key authentication by listing artists"
+          }
+        }
+      ],
+      "description": "Authentication testing for Feature.fm Marketing API"
+    },
+    {
+      "name": "Artists",
+      "item": [
+        {
+          "name": "List Artists",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains artists array', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "// Store first artist ID for testing",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.length > 0) {",
+                  "        pm.environment.set('artistId', response.data[0].id);",
+                  "        pm.environment.set('artistName', response.data[0].artistName);",
+                  "        console.log('Stored artist:', response.data[0].artistName);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/artists",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "artists"]
+            },
+            "description": "Get a list of all artists"
+          }
+        },
+        {
+          "name": "Search Artists",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/artists/search?term={{searchTerm}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "artists", "search"],
+              "query": [
+                {
+                  "key": "term",
+                  "value": "{{searchTerm}}",
+                  "description": "Search term for artist name"
+                }
+              ]
+            },
+            "description": "Search for artists by name"
+          }
+        },
+        {
+          "name": "Get Artist",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/artist/:artistId",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "artist", ":artistId"],
+              "variable": [
+                {
+                  "key": "artistId",
+                  "value": "{{artistId}}",
+                  "description": "Artist ID"
+                }
+              ]
+            },
+            "description": "Get details of a specific artist"
+          }
+        },
+        {
+          "name": "Create Artist",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Artist created', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.environment.set('newArtistId', response.data.id);",
+                  "        console.log('Created artist ID:', response.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artistName\": \"Test Artist {{$timestamp}}\",\n  \"type\": \"artist\",\n  \"countryCode\": \"US\",\n  \"shortBio\": \"Created via Postman API test\",\n  \"artistImage\": \"https://via.placeholder.com/500\",\n  \"tags\": [\"postman\", \"test\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/artist",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "artist"]
+            },
+            "description": "Create a new artist (Sandbox only)"
+          }
+        },
+        {
+          "name": "Update Artist",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artistName\": \"Updated Artist Name\",\n  \"shortBio\": \"Updated bio\",\n  \"tags\": [\"updated\", \"test\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/artist/:artistId",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "artist", ":artistId"],
+              "variable": [
+                {
+                  "key": "artistId",
+                  "value": "{{newArtistId}}",
+                  "description": "Artist ID to update"
+                }
+              ]
+            },
+            "description": "Update an existing artist (Sandbox only)"
+          }
+        }
+      ],
+      "description": "Artist management endpoints"
+    },
+    {
+      "name": "SmartLinks",
+      "item": [
+        {
+          "name": "Get SmartLink",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/smartlink/:smartlinkId",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "smartlink", ":smartlinkId"],
+              "variable": [
+                {
+                  "key": "smartlinkId",
+                  "value": "",
+                  "description": "SmartLink ID"
+                }
+              ]
+            },
+            "description": "Get SmartLink details by ID"
+          }
+        },
+        {
+          "name": "Get SmartLink by ShortId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/smartlink/shortid/:shortId?domain=ffm.to",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "smartlink", "shortid", ":shortId"],
+              "query": [
+                {
+                  "key": "domain",
+                  "value": "ffm.to",
+                  "description": "SmartLink domain"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "shortId",
+                  "value": "",
+                  "description": "SmartLink short ID"
+                }
+              ]
+            },
+            "description": "Get SmartLink by short ID and domain"
+          }
+        },
+        {
+          "name": "Create SmartLink",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('SmartLink created', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.environment.set('smartlinkId', response.data.id);",
+                  "        console.log('Created SmartLink ID:', response.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artistId\": \"{{artistId}}\",\n  \"shortId\": \"test-{{$timestamp}}\",\n  \"domain\": \"https://ffm.to\",\n  \"title\": \"Test SmartLink {{$timestamp}}\",\n  \"image\": \"https://via.placeholder.com/500\",\n  \"description\": \"Created via Postman\",\n  \"stores\": [\n    {\n      \"storeId\": \"spotify\",\n      \"url\": \"https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp\"\n    },\n    {\n      \"storeId\": \"apple\",\n      \"url\": \"https://music.apple.com/us/album/test/123456789\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/smartlink",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "smartlink"]
+            },
+            "description": "Create a post-release SmartLink (Sandbox only)"
+          }
+        },
+        {
+          "name": "Create Pre-Save SmartLink",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"artistId\": \"{{artistId}}\",\n  \"shortId\": \"presave-{{$timestamp}}\",\n  \"domain\": \"https://ffm.to\",\n  \"title\": \"Pre-Save Campaign {{$timestamp}}\",\n  \"image\": \"https://via.placeholder.com/500\",\n  \"releaseDate\": \"2025-12-31\",\n  \"timezone\": \"America/New_York\",\n  \"stores\": [\n    {\n      \"storeId\": \"spotify\",\n      \"url\": \"https://open.spotify.com/album/1DFixLWuPkv3KT3TnV35m3\"\n    }\n  ],\n  \"preSaveFollow\": [\n    {\n      \"storeId\": \"spotify\",\n      \"entities\": [\n        {\n          \"url\": \"https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg\"\n        }\n      ]\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/smartlink/pre-save",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "smartlink", "pre-save"]
+            },
+            "description": "Create a pre-save campaign (Sandbox only)"
+          }
+        }
+      ],
+      "description": "SmartLink management endpoints"
+    },
+    {
+      "name": "Action Pages",
+      "item": [
+        {
+          "name": "List Action Pages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/actionpages",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "actionpages"]
+            },
+            "description": "Get a list of all action pages"
+          }
+        },
+        {
+          "name": "Search Action Pages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/actionpages/search?term={{searchTerm}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "actionpages", "search"],
+              "query": [
+                {
+                  "key": "term",
+                  "value": "{{searchTerm}}",
+                  "description": "Search term"
+                }
+              ]
+            },
+            "description": "Search action pages"
+          }
+        },
+        {
+          "name": "Get Action Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/manage/v1/actionpage/:actionPageId",
+              "host": ["{{baseUrl}}"],
+              "path": ["manage", "v1", "actionpage", ":actionPageId"],
+              "variable": [
+                {
+                  "key": "actionPageId",
+                  "value": "",
+                  "description": "Action Page ID"
+                }
+              ]
+            },
+            "description": "Get action page details"
+          }
+        }
+      ],
+      "description": "Action Page management endpoints"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Log request for debugging",
+          "console.log(`Request: ${pm.request.method} ${pm.request.url.getPath()}`);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test: No server errors",
+          "pm.test('No server errors (5xx)', function () {",
+          "    pm.expect(pm.response.code).to.be.below(500);",
+          "});",
+          "",
+          "// Log response time",
+          "console.log(`Response time: ${pm.response.responseTime}ms`);",
+          "",
+          "// Handle authentication errors",
+          "if (pm.response.code === 401) {",
+          "    console.error('Authentication failed - check API key');",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.feature.fm",
+      "type": "default",
+      "description": "Feature.fm API base URL"
+    },
+    {
+      "key": "apiKey",
+      "value": "your_api_key_here",
+      "type": "secret",
+      "description": "Your Feature.fm API key (from .env file)"
+    },
+    {
+      "key": "artistId",
+      "value": "",
+      "type": "default",
+      "description": "Artist ID (auto-populated from List Artists)"
+    },
+    {
+      "key": "newArtistId",
+      "value": "",
+      "type": "default",
+      "description": "Newly created artist ID"
+    },
+    {
+      "key": "smartlinkId",
+      "value": "",
+      "type": "default",
+      "description": "SmartLink ID"
+    },
+    {
+      "key": "searchTerm",
+      "value": "test",
+      "type": "default",
+      "description": "Default search term"
+    }
+  ]
+}

@@ -1,0 +1,373 @@
+{
+  "timestamp": "2025-10-10T09:22:31.574485",
+  "environment": "sandbox",
+  "credentials": {
+    "api_key": "3890d422...",
+    "iss": "sandbox-precise.digital"
+  },
+  "endpoints_tested": [
+    "https://api.feature.fm/manage/v1/artists",
+    "https://api.feature.fm/manage/v1/artists/search?term=test",
+    "https://api.feature.fm/manage/v1/smartlinks",
+    "https://api.feature.fm/manage/v1/artist"
+  ],
+  "tests": {
+    "basic_auth": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:22:32.950877",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:22:32 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"1be-fJQ6YyHqh0nLqX4g1t/d4iF4rV0\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": [
+          {
+            "id": "68bfe6322700001200643e2e",
+            "name": "Precise Digital Test Artist 1757406769"
+          },
+          {
+            "id": "68e8af2a2800000b0022d728",
+            "name": "Sandbox Test Artist 20251010_090058"
+          },
+          {
+            "id": "68e8a6bf260000120010557d",
+            "name": "Test Artist 20251010_082503"
+          },
+          {
+            "id": "68e8a6f0280000140022d6ec",
+            "name": "Test Artist 20251010_082552"
+          },
+          {
+            "id": "68e8a76f260000090010557f",
+            "name": "Test Artist 20251010_082759"
+          },
+          {
+            "id": "68e8a7992800002c0022d6ef",
+            "name": "Test Artist 20251010_082841"
+          }
+        ],
+        "url": "https://api.feature.fm/manage/v1/artists",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "jwt_auth": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:22:33.278204",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:22:33 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"1be-fJQ6YyHqh0nLqX4g1t/d4iF4rV0\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": [
+          {
+            "id": "68bfe6322700001200643e2e",
+            "name": "Precise Digital Test Artist 1757406769"
+          },
+          {
+            "id": "68e8af2a2800000b0022d728",
+            "name": "Sandbox Test Artist 20251010_090058"
+          },
+          {
+            "id": "68e8a6bf260000120010557d",
+            "name": "Test Artist 20251010_082503"
+          },
+          {
+            "id": "68e8a6f0280000140022d6ec",
+            "name": "Test Artist 20251010_082552"
+          },
+          {
+            "id": "68e8a76f260000090010557f",
+            "name": "Test Artist 20251010_082759"
+          },
+          {
+            "id": "68e8a7992800002c0022d6ef",
+            "name": "Test Artist 20251010_082841"
+          }
+        ],
+        "url": "https://api.feature.fm/manage/v1/artists",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "marketing_list_artists": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:22:33.605769",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:22:33 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"1be-fJQ6YyHqh0nLqX4g1t/d4iF4rV0\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": [
+          {
+            "id": "68bfe6322700001200643e2e",
+            "name": "Precise Digital Test Artist 1757406769"
+          },
+          {
+            "id": "68e8af2a2800000b0022d728",
+            "name": "Sandbox Test Artist 20251010_090058"
+          },
+          {
+            "id": "68e8a6bf260000120010557d",
+            "name": "Test Artist 20251010_082503"
+          },
+          {
+            "id": "68e8a6f0280000140022d6ec",
+            "name": "Test Artist 20251010_082552"
+          },
+          {
+            "id": "68e8a76f260000090010557f",
+            "name": "Test Artist 20251010_082759"
+          },
+          {
+            "id": "68e8a7992800002c0022d6ef",
+            "name": "Test Artist 20251010_082841"
+          }
+        ],
+        "url": "https://api.feature.fm/manage/v1/artists",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "marketing_search_artists": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:22:34.795726",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:22:34 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"1da-wJ+rscHgyXet+pFImcOPR/mwBpE\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": {
+          "page": 1,
+          "pages": 1,
+          "data": [
+            {
+              "id": "68e8a7992800002c0022d6ef",
+              "name": "Test Artist 20251010_082841"
+            },
+            {
+              "id": "68e8a76f260000090010557f",
+              "name": "Test Artist 20251010_082759"
+            },
+            {
+              "id": "68e8a6bf260000120010557d",
+              "name": "Test Artist 20251010_082503"
+            },
+            {
+              "id": "68e8a6f0280000140022d6ec",
+              "name": "Test Artist 20251010_082552"
+            },
+            {
+              "id": "68e8af2a2800000b0022d728",
+              "name": "Sandbox Test Artist 20251010_090058"
+            },
+            {
+              "id": "68bfe6322700001200643e2e",
+              "name": "Precise Digital Test Artist 1757406769"
+            }
+          ]
+        },
+        "url": "https://api.feature.fm/manage/v1/artists/search?term=test",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "marketing_list_smartlinks": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:35.093959",
+      "details": {
+        "status_code": 404,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:22:34 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Content-Length": "43",
+          "Connection": "keep-alive",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"2b-bBFWDdMZj30TOnLpIodr0R/45OY\"",
+          "Vary": "Accept-Encoding"
+        },
+        "data": {
+          "code": 404,
+          "message": "Endpoint not found"
+        },
+        "url": "https://api.feature.fm/manage/v1/smartlinks",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "marketing_create_artist": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:22:37.424720",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:22:37 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, X-HTTP-Method-Override, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"142-GGD5vgeqA5R69r4ORJg9JbcRzx0\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": {
+          "id": "68e8b43b2800000b0022d732",
+          "artistName": "API Test Artist 20251010_092235",
+          "type": "artist",
+          "countryCode": "us",
+          "tags": [
+            "test",
+            "api-testing"
+          ],
+          "shortBio": "Created by complete API test suite",
+          "linkSettings": {
+            "customDomains": [],
+            "localization": [
+              {
+                "locale": "default",
+                "enabledStores": [],
+                "disabledStores": []
+              }
+            ],
+            "affiliates": {}
+          }
+        },
+        "url": "https://api.feature.fm/manage/v1/artist",
+        "method": "POST",
+        "attempt": 1
+      }
+    },
+    "publisher_identify_consumer": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:37.723870",
+      "details": {
+        "status_code": 401,
+        "data": "{\"status\":1,\"message\":\"Unauthorized\"}",
+        "url": "https://api.feature.fm/consumer/identify"
+      }
+    },
+    "publisher_featured_song": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:38.030898",
+      "details": {
+        "status_code": 400,
+        "data": "",
+        "url": "https://api.feature.fm/featured/song"
+      }
+    },
+    "publisher_track_play": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:38.331546",
+      "details": {
+        "status_code": 400,
+        "data": "{\"status\":1,\"message\":\"missing consumer_token parameter\"}",
+        "url": "https://api.feature.fm/event/test_play_1760080958/play"
+      }
+    },
+    "publisher_track_like": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:38.628349",
+      "details": {
+        "status_code": 400,
+        "data": "{\"status\":1,\"message\":\"missing consumer_token parameter\"}",
+        "url": "https://api.feature.fm/event/test_play_1760080958/like"
+      }
+    },
+    "conversion_init_session": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:38.921945",
+      "details": {
+        "status_code": 404,
+        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /conversion/session/init</pre>\n</body>\n</html>\n",
+        "url": "https://api.feature.fm/conversion/session/init"
+      }
+    },
+    "conversion_report_transaction": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:22:39.217025",
+      "details": {
+        "status_code": 400,
+        "data": "failed to decode ffm hash",
+        "url": "https://api.feature.fm/conversion/transaction"
+      }
+    }
+  },
+  "summary": {
+    "total": 12,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 7
+  },
+  "errors": []
+}

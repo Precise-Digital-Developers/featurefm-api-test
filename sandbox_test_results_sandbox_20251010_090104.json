@@ -1,0 +1,462 @@
+{
+  "timestamp": "2025-10-10T09:00:53.579413",
+  "environment": "sandbox",
+  "credentials": {
+    "api_key": "3890d422...",
+    "iss": "sandbox-precise.digital"
+  },
+  "endpoints_tested": [
+    "https://api.feature.fm/manage/v1/artists",
+    "https://api.feature.fm/manage/v1/artist",
+    "https://api.feature.fm/manage/v1/artist/68e8af2a2800000b0022d728",
+    "https://api.feature.fm/manage/v1/smartlink",
+    "https://api.feature.fm/manage/v1/smartlink/pre-save",
+    "https://api.feature.fm/manage/v1/actionpages"
+  ],
+  "tests": {
+    "basic_auth": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:00:57.702168",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:00:57 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"16f-FCNaFz5AZnZoXcz3ALEixSdgtKo\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": [
+          {
+            "id": "68bfe6322700001200643e2e",
+            "name": "Precise Digital Test Artist 1757406769"
+          },
+          {
+            "id": "68e8a6bf260000120010557d",
+            "name": "Test Artist 20251010_082503"
+          },
+          {
+            "id": "68e8a6f0280000140022d6ec",
+            "name": "Test Artist 20251010_082552"
+          },
+          {
+            "id": "68e8a76f260000090010557f",
+            "name": "Test Artist 20251010_082759"
+          },
+          {
+            "id": "68e8a7992800002c0022d6ef",
+            "name": "Test Artist 20251010_082841"
+          }
+        ],
+        "url": "https://api.feature.fm/manage/v1/artists",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "jwt_auth": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:00:58.075248",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:00:57 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"16f-FCNaFz5AZnZoXcz3ALEixSdgtKo\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": [
+          {
+            "id": "68bfe6322700001200643e2e",
+            "name": "Precise Digital Test Artist 1757406769"
+          },
+          {
+            "id": "68e8a6bf260000120010557d",
+            "name": "Test Artist 20251010_082503"
+          },
+          {
+            "id": "68e8a6f0280000140022d6ec",
+            "name": "Test Artist 20251010_082552"
+          },
+          {
+            "id": "68e8a76f260000090010557f",
+            "name": "Test Artist 20251010_082759"
+          },
+          {
+            "id": "68e8a7992800002c0022d6ef",
+            "name": "Test Artist 20251010_082841"
+          }
+        ],
+        "url": "https://api.feature.fm/manage/v1/artists",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "list_artists": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:00:58.407920",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:00:58 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"16f-FCNaFz5AZnZoXcz3ALEixSdgtKo\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": [
+          {
+            "id": "68bfe6322700001200643e2e",
+            "name": "Precise Digital Test Artist 1757406769"
+          },
+          {
+            "id": "68e8a6bf260000120010557d",
+            "name": "Test Artist 20251010_082503"
+          },
+          {
+            "id": "68e8a6f0280000140022d6ec",
+            "name": "Test Artist 20251010_082552"
+          },
+          {
+            "id": "68e8a76f260000090010557f",
+            "name": "Test Artist 20251010_082759"
+          },
+          {
+            "id": "68e8a7992800002c0022d6ef",
+            "name": "Test Artist 20251010_082841"
+          }
+        ],
+        "url": "https://api.feature.fm/manage/v1/artists",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "create_artist": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:01:00.829792",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:01:00 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, X-HTTP-Method-Override, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"183-oSQyUqq17K43CPe7T+zu5jBKEfY\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": {
+          "id": "68e8af2a2800000b0022d728",
+          "artistName": "Sandbox Test Artist 20251010_090058",
+          "artistImage": "https://via.placeholder.com/500",
+          "type": "artist",
+          "countryCode": "us",
+          "tags": [
+            "test",
+            "sandbox",
+            "automated"
+          ],
+          "shortBio": "Created by automated sandbox test suite",
+          "linkSettings": {
+            "customDomains": [],
+            "localization": [
+              {
+                "locale": "default",
+                "enabledStores": [],
+                "disabledStores": []
+              }
+            ],
+            "affiliates": {}
+          }
+        },
+        "url": "https://api.feature.fm/manage/v1/artist",
+        "method": "POST",
+        "attempt": 1
+      }
+    },
+    "get_artist_details": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:01:01.393091",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:01:01 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"183-oSQyUqq17K43CPe7T+zu5jBKEfY\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": {
+          "id": "68e8af2a2800000b0022d728",
+          "artistName": "Sandbox Test Artist 20251010_090058",
+          "artistImage": "https://via.placeholder.com/500",
+          "type": "artist",
+          "countryCode": "us",
+          "tags": [
+            "test",
+            "sandbox",
+            "automated"
+          ],
+          "shortBio": "Created by automated sandbox test suite",
+          "linkSettings": {
+            "customDomains": [],
+            "localization": [
+              {
+                "locale": "default",
+                "enabledStores": [],
+                "disabledStores": []
+              }
+            ],
+            "affiliates": {}
+          }
+        },
+        "url": "https://api.feature.fm/manage/v1/artist/68e8af2a2800000b0022d728",
+        "method": "GET",
+        "attempt": 1
+      }
+    },
+    "create_smartlink": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:01:04.039655",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:01:03 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "X-HTTP-Method-Override, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"49c-3/I+Z+Av0jBYz4pinY/GbJLVTL4\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": {
+          "id": "68e8af2f3800001400aad7b7",
+          "artistId": "68e8af2a2800000b0022d728",
+          "artist": {
+            "id": "68e8af2a2800000b0022d728",
+            "alias": "sandbox-test-artist-20251010_090058",
+            "createdBy": "689c4b212600001100d5685c",
+            "name": "Sandbox Test Artist 20251010_090058",
+            "accountId": "689c4b212600001100d5685c",
+            "profileImage": "https://via.placeholder.com/500"
+          },
+          "background": {
+            "type": "blur"
+          },
+          "title": "Sandbox Test Link 1760079661",
+          "domain": "https://ffm.to",
+          "shortId": "test-1760079661",
+          "type": "post_release",
+          "status": "ACTIVE",
+          "description": "Test smartlink created by automated sandbox tests",
+          "createdAt": 1760079663825,
+          "image": "https://via.placeholder.com/500",
+          "pageLayout": "base_layout",
+          "isLocalRelease": false,
+          "enabledStores": [],
+          "routingRules": {
+            "idleTimeoutRouting": null,
+            "usePreferredService": false
+          },
+          "affiliates": {
+            "apple": "",
+            "amazon": []
+          },
+          "preSaveFollow": [],
+          "stores": [
+            {
+              "storeId": "spotify",
+              "url": "https://open.spotify.com/track/3n3Ppam7vgaVa1iaRUc9Lp",
+              "showAfterRelease": false,
+              "title": "Mr. Brightside",
+              "streamType": "track",
+              "territories": []
+            },
+            {
+              "storeId": "apple",
+              "url": "https://music.apple.com/us/album/test/123456789",
+              "showAfterRelease": false,
+              "territories": []
+            }
+          ],
+          "localization": [],
+          "sharedAnalytics": {
+            "enabled": false
+          }
+        },
+        "url": "https://api.feature.fm/manage/v1/smartlink",
+        "method": "POST",
+        "attempt": 1
+      }
+    },
+    "create_presave": {
+      "status": "PASSED",
+      "timestamp": "2025-10-10T09:01:04.611516",
+      "details": {
+        "status_code": 200,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:01:04 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Transfer-Encoding": "chunked",
+          "Connection": "keep-alive",
+          "Vary": "Accept-Encoding, X-HTTP-Method-Override, Accept-Encoding",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"3f3-2f/XGt/C1dJkC15XdKiVxaE+GOk\"",
+          "Content-Encoding": "gzip"
+        },
+        "data": {
+          "id": "68e8af303900001400ee0390",
+          "artistId": "68e8af2a2800000b0022d728",
+          "artist": {
+            "id": "68e8af2a2800000b0022d728",
+            "alias": "sandbox-test-artist-20251010_090058",
+            "createdBy": "689c4b212600001100d5685c",
+            "name": "Sandbox Test Artist 20251010_090058",
+            "accountId": "689c4b212600001100d5685c",
+            "profileImage": "https://via.placeholder.com/500"
+          },
+          "background": {
+            "type": "blur"
+          },
+          "title": "Sandbox Pre-Save 20251010",
+          "domain": "https://ffm.to",
+          "shortId": "presave-1760079664",
+          "type": "pre_release",
+          "status": "ACTIVE",
+          "createdAt": 1760079664355,
+          "image": "https://via.placeholder.com/500",
+          "pageLayout": "base_layout",
+          "releaseDate": "2025-11-09",
+          "releaseTime": "00:00",
+          "timezone": "America/New_York",
+          "isLocalRelease": false,
+          "enabledStores": [],
+          "routingRules": {
+            "idleTimeoutRouting": null,
+            "usePreferredService": false
+          },
+          "affiliates": {
+            "apple": "",
+            "amazon": []
+          },
+          "preSaveFollow": [],
+          "stores": [
+            {
+              "storeId": "spotify",
+              "url": "https://open.spotify.com/album/1DFixLWuPkv3KT3TnV35m3",
+              "showAfterRelease": false
+            }
+          ],
+          "localization": [],
+          "sharedAnalytics": {
+            "enabled": false
+          }
+        },
+        "url": "https://api.feature.fm/manage/v1/smartlink/pre-save",
+        "method": "POST",
+        "attempt": 1
+      }
+    },
+    "list_actionpages": {
+      "status": "WARNING",
+      "timestamp": "2025-10-10T09:01:04.982639",
+      "details": {
+        "status_code": 404,
+        "headers": {
+          "Server": "openresty/1.15.8.1",
+          "Date": "Fri, 10 Oct 2025 07:01:04 GMT",
+          "Content-Type": "application/json; charset=utf-8",
+          "Content-Length": "43",
+          "Connection": "keep-alive",
+          "X-DNS-Prefetch-Control": "off",
+          "X-Frame-Options": "SAMEORIGIN",
+          "Strict-Transport-Security": "max-age=15724800; includeSubDomains",
+          "X-Download-Options": "noopen",
+          "X-Content-Type-Options": "nosniff",
+          "X-XSS-Protection": "1; mode=block",
+          "Access-Control-Allow-Origin": "*",
+          "ETag": "W/\"2b-bBFWDdMZj30TOnLpIodr0R/45OY\"",
+          "Vary": "Accept-Encoding"
+        },
+        "data": {
+          "code": 404,
+          "message": "Endpoint not found"
+        },
+        "url": "https://api.feature.fm/manage/v1/actionpages",
+        "method": "GET",
+        "attempt": 1
+      }
+    }
+  },
+  "summary": {
+    "total": 8,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "warnings": 1
+  },
+  "errors": []
+}
