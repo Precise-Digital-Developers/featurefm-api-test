@@ -4,9 +4,13 @@ Postman collections for testing Feature.fm APIs interactively.
 
 ## Available Collections
 
-### Marketing API Collection
+### 1. Marketing API Collection
 
 **File:** `Feature.fm_Marketing_API.postman_collection.json`
+
+**API Type:** Music Marketing & Distribution
+**Base URL:** `https://api.feature.fm`
+**Authentication:** API Key (`x-api-key` header)
 
 **Covers:**
 
@@ -17,16 +21,37 @@ Postman collections for testing Feature.fm APIs interactively.
 
 **Endpoints:** 15+ requests organized by category
 
+### 2. Sandbox/Precise API Collection
+
+**File:** `Feature_FM_Sandbox_Precise_API.postman_collection.json`
+
+**API Type:** Feature Management & Targeting
+**Base URL:** `https://api.sandbox-precise.digital`
+**Authentication:** JWT (Bearer token)
+
+**Covers:**
+
+- JWT authentication (Get Token, Refresh Token)
+- Feature flag management (CRUD operations, Toggle)
+- Audience targeting and segmentation
+- Analytics and usage tracking
+- Webhook management
+- Health monitoring
+
+**Endpoints:** 20+ requests organized by category
+
 ## Quick Start
 
-### 1. Import Collection
+### Marketing API Setup
+
+#### 1. Import Collection
 
 1. Open Postman
 2. Click **Import** button
 3. Select `Feature.fm_Marketing_API.postman_collection.json`
 4. Collection will appear in your sidebar
 
-### 2. Configure Variables
+#### 2. Configure Variables
 
 The collection uses variables that need to be set:
 
@@ -47,7 +72,7 @@ The collection uses variables that need to be set:
 
 ```json
 {
-  "name": "Feature.fm Sandbox",
+  "name": "Feature.fm Production",
   "values": [
     {
       "key": "baseUrl",
@@ -56,14 +81,14 @@ The collection uses variables that need to be set:
     },
     {
       "key": "apiKey",
-      "value": "your_sandbox_api_key_here",
+      "value": "your_api_key_here",
       "enabled": true
     }
   ]
 }
 ```
 
-### 3. Run Requests
+#### 3. Run Requests
 
 **Recommended order:**
 
@@ -72,13 +97,51 @@ The collection uses variables that need to be set:
 3. **Artists** → Get Artist
 4. **SmartLinks** → Create SmartLink (requires `artistId`)
 
+---
+
+### Sandbox/Precise API Setup
+
+#### 1. Import Collection
+
+1. Open Postman
+2. Click **Import** button
+3. Select `Feature_FM_Sandbox_Precise_API.postman_collection.json`
+4. Collection will appear in your sidebar
+
+#### 2. Configure Variables (Already Set!)
+
+The sandbox collection comes pre-configured with credentials from your email:
+
+```json
+{
+  "baseUrl": "https://api.sandbox-precise.digital",
+  "apiKey": "3890d422-882b-486d-9de6-c106d9951094",
+  "secretKey": "mf1x4y13dgnqmcm3v9x7t9fucg7nozil",
+  "issuer": "sandbox-precise.digital"
+}
+```
+
+**Note:** `accessToken` and other IDs are auto-populated after authentication.
+
+#### 3. Run Requests
+
+**Recommended order:**
+
+1. **Authentication** → Get Access Token (stores JWT automatically)
+2. **Features** → List Features (populates `featureId`)
+3. **Features** → Create Feature
+4. **Audiences** → Create Audience
+5. **Analytics** → Feature Usage Analytics
+
 ## Request Categories
 
-### Authentication
+### Marketing API Categories
+
+#### Authentication
 
 - **Test API Key** - Verifies API authentication by listing artists
 
-### Artists
+#### Artists
 
 - **List Artists** - Get all artists (stores first artist ID)
 - **Search Artists** - Search by artist name
@@ -93,35 +156,58 @@ The collection uses variables that need to be set:
 - **Create SmartLink** - Create post-release link (Sandbox only)
 - **Create Pre-Save SmartLink** - Create pre-save campaign (Sandbox only)
 
-### Action Pages
+#### Action Pages
 
 - **List Action Pages** - Get all action pages
 - **Search Action Pages** - Search action pages
 - **Get Action Page** - Get specific action page
 
+---
+
+### Sandbox/Precise API Categories
+
+#### Authentication
+
+- **Get Access Token** - Obtain JWT using API key and secret
+- **Refresh Token** - Refresh JWT before expiration
+
+#### Features
+
+- **List Features** - Get all features with pagination
+- **Get Feature** - Get specific feature details
+- **Create Feature** - Create new feature flag
+- **Update Feature** - Update feature configuration
+- **Toggle Feature** - Quick enable/disable
+- **Delete Feature** - Remove feature
+
+#### Audiences
+
+- **List Audiences** - Get all audience segments
+- **Get Audience** - Get audience details
+- **Create Audience** - Create targeting rules
+- **Update Audience** - Modify audience rules
+- **Delete Audience** - Remove audience
+
+#### Analytics
+
+- **Feature Usage Analytics** - Get usage metrics for features
+- **Export Analytics** - Export data as CSV/JSON
+
+#### Webhooks
+
+- **List Webhooks** - Get all registered webhooks
+- **Register Webhook** - Create new webhook
+- **Get Webhook** - Get webhook details
+- **Update Webhook** - Modify webhook configuration
+- **Delete Webhook** - Remove webhook
+
+#### Health Check
+
+- **Health Check** - API status (no auth required)
+
 ## Environment Setup
 
-### Sandbox Environment
-
-```json
-{
-  "name": "Feature.fm Sandbox",
-  "values": [
-    {
-      "key": "baseUrl",
-      "value": "https://api.feature.fm",
-      "enabled": true
-    },
-    {
-      "key": "apiKey",
-      "value": "your_sandbox_api_key",
-      "enabled": true
-    }
-  ]
-}
-```
-
-### Production Environment (Read-Only Recommended)
+### Marketing API Environment
 
 ```json
 {
@@ -141,18 +227,62 @@ The collection uses variables that need to be set:
 }
 ```
 
-**⚠️ Warning:** Disable write operations (Create, Update, Delete requests) in production environment.
+**⚠️ Warning:** Be careful with write operations (Create, Update, Delete requests) in production.
 
-## Features
+### Sandbox/Precise API Environment
+
+```json
+{
+  "name": "Feature FM Sandbox",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.sandbox-precise.digital",
+      "enabled": true
+    },
+    {
+      "key": "apiKey",
+      "value": "3890d422-882b-486d-9de6-c106d9951094",
+      "enabled": true
+    },
+    {
+      "key": "secretKey",
+      "value": "mf1x4y13dgnqmcm3v9x7t9fucg7nozil",
+      "enabled": true
+    },
+    {
+      "key": "issuer",
+      "value": "sandbox-precise.digital",
+      "enabled": true
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "enabled": true
+    }
+  ]
+}
+```
+
+**✅ Safe Testing:** Sandbox environment is isolated and safe for all operations.
+
+## Collection Features
 
 ### Auto-Population
 
-The collection automatically stores IDs from responses:
+Both collections automatically store IDs from responses:
 
+**Marketing API:**
 - Create/List Artists → stores `artistId` and `newArtistId`
 - Create SmartLink → stores `smartlinkId`
 
-Use `{{artistId}}` in subsequent requests.
+**Sandbox/Precise API:**
+- Authentication → stores `accessToken` and `tokenExpirationTime`
+- List/Create Features → stores `featureId` and `newFeatureId`
+- List/Create Audiences → stores `audienceId` and `newAudienceId`
+- Create Webhook → stores `webhookId`
+
+Use variables like `{{artistId}}` or `{{featureId}}` in subsequent requests.
 
 ### Test Scripts
 

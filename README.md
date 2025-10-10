@@ -1,52 +1,82 @@
 # Feature.fm API Test Suite
 
-A comprehensive test suite for the Feature.fm API with built-in safety features to protect production data.
+A comprehensive test suite for testing **two separate Feature.fm API products** with Postman collections and Python automation.
 
 ## Overview
 
-This test suite provides testing for **all three Feature.fm APIs** with two distinct environment modes:
+This project provides testing infrastructure for:
 
-- **Sandbox Mode**: Full CRUD operations for safe testing
-- **Production Mode**: READ-ONLY operations to prevent accidental data modification
+### 1. Marketing API (Music Industry)
+- **Purpose:** Music marketing, artist management, SmartLink distribution
+- **Base URL:** `https://api.feature.fm`
+- **Auth:** API Key
+- **Entities:** Artists, SmartLinks, Pre-Save Campaigns, Action Pages
 
-### Feature.fm APIs Covered
+### 2. Sandbox/Precise API (Feature Management)
+- **Purpose:** Feature flags, audience targeting, A/B testing
+- **Base URL:** `https://api.sandbox-precise.digital`
+- **Auth:** JWT (API Key + Secret)
+- **Entities:** Features, Audiences, Analytics, Webhooks
 
-1. **Marketing API** - Manage artists, smartlinks, campaigns, and action pages
-2. **Publisher API** - Track user engagement and content consumption
-3. **Conversion API** - Monitor conversions and transactions
+**📖 See [Project Overview](docs/PROJECT_OVERVIEW.md) for detailed comparison of both APIs**
 
 ## Project Structure
 
 ```text
 FeatureFM_API_Tests/
-├── config.py                      # Environment configuration & safety controls
-├── base_test.py                   # Base test class with common functionality
-├── test_sandbox.py                # Sandbox tests (Marketing API)
-├── test_production.py             # Production tests (READ-ONLY)
-├── test_all_apis.py               # Complete test suite (all 3 APIs)
-├── featurefm_api_tests.py         # Legacy test file (deprecated)
-├── app.py                         # Flask dashboard (optional)
-├── postman_collections/           # Postman collections for API testing
-│   ├── Feature.fm_Marketing_API.postman_collection.json
-│   └── README.md                  # Postman usage guide
-├── templates/
-│   └── dashboard.html             # Web dashboard UI
+│
+├── docs/                                                  # Documentation
+│   ├── Feature_FM_Marketing_API_Documentation.md              # Marketing API reference
+│   ├── Feature_FM_Sandbox_API_Documentation.md                # Sandbox API reference
+│   └── PROJECT_OVERVIEW.md                                    # Comprehensive guide
+│
+├── postman_collections/                                   # Postman collections (BOTH APIs)
+│   ├── Feature.fm_Marketing_API.postman_collection.json          # Music marketing
+│   ├── Feature_FM_Sandbox_Precise_API.postman_collection.json    # Feature management
+│   └── README.md                                                  # Postman guide
+│
+├── Python Tests/                  # Python automation (Marketing API focused)
+│   ├── config.py                      # Environment configuration
+│   ├── base_test.py                   # Base test class
+│   ├── test_sandbox.py                # Sandbox tests (Marketing API)
+│   ├── test_production.py             # Production tests (READ-ONLY)
+│   └── test_all_apis.py               # Complete test suite
+│
 ├── .env                           # Your credentials (NOT in git)
 ├── .env.example                   # Template for credentials
 ├── README.md                      # This file
-├── REORGANIZATION_SUMMARY.md      # Change log and migration guide
 └── requirements.txt               # Python dependencies
 ```
 
 ## Quick Start
 
-### 1. Install Dependencies
+### Option 1: Postman Testing (Recommended)
+
+#### Marketing API:
+1. Import `postman_collections/Feature.fm_Marketing_API.postman_collection.json`
+2. Set `apiKey` variable
+3. Run "Test API Key"
+4. Test endpoints interactively
+
+#### Sandbox/Precise API:
+1. Import `postman_collections/Feature_FM_Sandbox_Precise_API.postman_collection.json`
+2. Credentials are pre-configured!
+3. Run "Get Access Token"
+4. Test features, audiences, analytics
+
+**📖 See [Postman Collections README](postman_collections/README.md) for detailed setup**
+
+---
+
+### Option 2: Python Testing
+
+#### 1. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure Environment
+#### 2. Configure Environment
 
 Copy the example environment file and add your credentials:
 
@@ -57,40 +87,51 @@ cp .env.example .env
 Edit `.env` and add your credentials:
 
 ```bash
-# Sandbox (safe for testing)
-FEATUREFM_SANDBOX_API_KEY=your_sandbox_key
-FEATUREFM_SANDBOX_SECRET_KEY=your_sandbox_secret
-FEATUREFM_SANDBOX_ISS=sandbox-precise.digital
+# Marketing API (Production)
+FEATUREFM_PROD_API_KEY=your_marketing_api_key
 
-# Production (if needed - read-only)
-FEATUREFM_PROD_API_KEY=your_prod_key
-FEATUREFM_PROD_SECRET_KEY=your_prod_secret
-FEATUREFM_PROD_ISS=your_prod_iss
+# Sandbox/Precise API (Feature Management)
+FEATUREFM_SANDBOX_API_KEY=3890d422-882b-486d-9de6-c106d9951094
+FEATUREFM_SANDBOX_SECRET_KEY=mf1x4y13dgnqmcm3v9x7t9fucg7nozil
+FEATUREFM_SANDBOX_ISS=sandbox-precise.digital
 ```
 
-### 3. Run Tests
+#### 3. Run Tests
 
-**Marketing API Tests (Recommended for sandbox):**
+**Marketing API Tests:**
 
 ```bash
-python test_sandbox.py
+python test_sandbox.py     # Full CRUD testing
+python test_production.py  # READ-ONLY testing
 ```
 
-**All Three APIs (Comprehensive test):**
+**All APIs (Marketing, Publisher, Conversion):**
 
 ```bash
 python test_all_apis.py
 ```
 
-**Production Tests (READ-ONLY - requires confirmation):**
+## Understanding the Two APIs
 
-```bash
-python test_production.py
-```
+### API Comparison
 
-## Feature.fm APIs
+| Feature | Marketing API | Sandbox/Precise API |
+|---------|---------------|---------------------|
+| **Industry** | Music | Software Development |
+| **Primary Purpose** | Artist promotion, music links | Feature flags, A/B testing |
+| **Base URL** | `api.feature.fm` | `api.sandbox-precise.digital` |
+| **Authentication** | API Key (header) | JWT (Bearer token) |
+| **Entities** | Artists, SmartLinks, Campaigns | Features, Audiences, Analytics |
+| **Postman Collection** | ✅ Available | ✅ Available (NEW!) |
+| **Python Tests** | ✅ Available | ⏳ To be created |
 
-### Marketing API
+**📖 Full comparison in [Project Overview](docs/PROJECT_OVERVIEW.md)**
+
+---
+
+## Feature.fm APIs - Detailed Info
+
+### Marketing API (Music Industry)
 
 **Status:** ✅ Available in Sandbox
 **Base URL:** `https://api.feature.fm/manage/v1/`

@@ -1,0 +1,820 @@
+{
+  "info": {
+    "name": "Feature FM Sandbox/Precise API",
+    "description": "Feature FM Sandbox API collection for feature management, audience targeting, and analytics. Uses JWT authentication with sandbox-precise.digital environment.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "featurefm-sandbox-precise-api-v1",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get Access Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Authentication successful', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains access token', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('access_token');",
+                  "    pm.expect(response).to.have.property('expires_in');",
+                  "});",
+                  "",
+                  "// Store access token and expiration time",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('accessToken', response.access_token);",
+                  "    ",
+                  "    // Calculate expiration time",
+                  "    const expiresIn = response.expires_in * 1000; // Convert to milliseconds",
+                  "    const expirationTime = Date.now() + expiresIn;",
+                  "    pm.environment.set('tokenExpirationTime', expirationTime);",
+                  "    ",
+                  "    console.log('✓ Access token stored successfully');",
+                  "    console.log('Token expires in:', response.expires_in, 'seconds');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"apiKey\": \"{{apiKey}}\",\n  \"secretKey\": \"{{secretKey}}\",\n  \"iss\": \"{{issuer}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/token",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "token"]
+            },
+            "description": "Obtain JWT access token using API key and secret key"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Token refreshed successfully', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Update stored token",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.environment.set('accessToken', response.access_token);",
+                  "    ",
+                  "    const expiresIn = response.expires_in * 1000;",
+                  "    const expirationTime = Date.now() + expiresIn;",
+                  "    pm.environment.set('tokenExpirationTime', expirationTime);",
+                  "    ",
+                  "    console.log('✓ Token refreshed successfully');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "Refresh access token before expiration"
+          }
+        }
+      ],
+      "description": "JWT authentication endpoints for Feature FM Sandbox API"
+    },
+    {
+      "name": "Features",
+      "item": [
+        {
+          "name": "List Features",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response contains features data', function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response).to.have.property('data');",
+                  "    pm.expect(response.data).to.be.an('array');",
+                  "});",
+                  "",
+                  "// Store first feature ID for testing",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.length > 0) {",
+                  "        pm.environment.set('featureId', response.data[0].id);",
+                  "        console.log('Stored feature ID:', response.data[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/features?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["features"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Results per page"
+                },
+                {
+                  "key": "status",
+                  "value": "active",
+                  "description": "Filter by status",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "",
+                  "description": "Filter by category",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get list of all features with pagination"
+          }
+        },
+        {
+          "name": "Get Feature",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/features/:featureId",
+              "host": ["{{baseUrl}}"],
+              "path": ["features", ":featureId"],
+              "variable": [
+                {
+                  "key": "featureId",
+                  "value": "{{featureId}}",
+                  "description": "Feature ID"
+                }
+              ]
+            },
+            "description": "Get details of a specific feature"
+          }
+        },
+        {
+          "name": "Create Feature",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Feature created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.environment.set('newFeatureId', response.data.id);",
+                  "        console.log('Created feature ID:', response.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Feature {{$timestamp}}\",\n  \"description\": \"Feature created via Postman for testing\",\n  \"category\": \"experimental\",\n  \"status\": \"beta\",\n  \"configuration\": {\n    \"enabled\": false,\n    \"rolloutPercentage\": 0,\n    \"targetAudience\": \"internal\",\n    \"settings\": {\n      \"theme\": \"dark\",\n      \"maxUsers\": 100\n    }\n  },\n  \"tags\": [\"postman\", \"test\", \"sandbox\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/features",
+              "host": ["{{baseUrl}}"],
+              "path": ["features"]
+            },
+            "description": "Create a new feature flag"
+          }
+        },
+        {
+          "name": "Update Feature",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Feature Name\",\n  \"description\": \"Updated description\",\n  \"status\": \"active\",\n  \"configuration\": {\n    \"enabled\": true,\n    \"rolloutPercentage\": 50\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/features/:featureId",
+              "host": ["{{baseUrl}}"],
+              "path": ["features", ":featureId"],
+              "variable": [
+                {
+                  "key": "featureId",
+                  "value": "{{newFeatureId}}",
+                  "description": "Feature ID to update"
+                }
+              ]
+            },
+            "description": "Update an existing feature"
+          }
+        },
+        {
+          "name": "Toggle Feature",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"enabled\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/features/:featureId/toggle",
+              "host": ["{{baseUrl}}"],
+              "path": ["features", ":featureId", "toggle"],
+              "variable": [
+                {
+                  "key": "featureId",
+                  "value": "{{featureId}}",
+                  "description": "Feature ID"
+                }
+              ]
+            },
+            "description": "Quick enable/disable feature without changing full configuration"
+          }
+        },
+        {
+          "name": "Delete Feature",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/features/:featureId",
+              "host": ["{{baseUrl}}"],
+              "path": ["features", ":featureId"],
+              "variable": [
+                {
+                  "key": "featureId",
+                  "value": "{{newFeatureId}}",
+                  "description": "Feature ID to delete"
+                }
+              ]
+            },
+            "description": "Delete a feature (sandbox only)"
+          }
+        }
+      ],
+      "description": "Feature flag management endpoints"
+    },
+    {
+      "name": "Audiences",
+      "item": [
+        {
+          "name": "List Audiences",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// Store first audience ID",
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.length > 0) {",
+                  "        pm.environment.set('audienceId', response.data[0].id);",
+                  "        console.log('Stored audience ID:', response.data[0].id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["audiences"]
+            },
+            "description": "Get list of all audiences"
+          }
+        },
+        {
+          "name": "Create Audience",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Audience created successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.environment.set('newAudienceId', response.data.id);",
+                  "        console.log('Created audience ID:', response.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Beta Testers {{$timestamp}}\",\n  \"description\": \"Early adopters for testing new features\",\n  \"rules\": [\n    {\n      \"attribute\": \"beta_enrolled\",\n      \"operator\": \"equals\",\n      \"value\": true\n    },\n    {\n      \"attribute\": \"account_age_days\",\n      \"operator\": \"greater_than\",\n      \"value\": 30\n    }\n  ],\n  \"matchType\": \"all\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/audiences",
+              "host": ["{{baseUrl}}"],
+              "path": ["audiences"]
+            },
+            "description": "Create a new audience with targeting rules"
+          }
+        },
+        {
+          "name": "Get Audience",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audiences/:audienceId",
+              "host": ["{{baseUrl}}"],
+              "path": ["audiences", ":audienceId"],
+              "variable": [
+                {
+                  "key": "audienceId",
+                  "value": "{{audienceId}}",
+                  "description": "Audience ID"
+                }
+              ]
+            },
+            "description": "Get details of a specific audience"
+          }
+        },
+        {
+          "name": "Update Audience",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Audience Name\",\n  \"description\": \"Updated description\",\n  \"rules\": [\n    {\n      \"attribute\": \"subscription_tier\",\n      \"operator\": \"equals\",\n      \"value\": \"premium\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/audiences/:audienceId",
+              "host": ["{{baseUrl}}"],
+              "path": ["audiences", ":audienceId"],
+              "variable": [
+                {
+                  "key": "audienceId",
+                  "value": "{{newAudienceId}}",
+                  "description": "Audience ID to update"
+                }
+              ]
+            },
+            "description": "Update an existing audience"
+          }
+        },
+        {
+          "name": "Delete Audience",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/audiences/:audienceId",
+              "host": ["{{baseUrl}}"],
+              "path": ["audiences", ":audienceId"],
+              "variable": [
+                {
+                  "key": "audienceId",
+                  "value": "{{newAudienceId}}",
+                  "description": "Audience ID to delete"
+                }
+              ]
+            },
+            "description": "Delete an audience (sandbox only)"
+          }
+        }
+      ],
+      "description": "Audience targeting and segmentation endpoints"
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "Feature Usage Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/analytics/features/:featureId?startDate=2025-01-01&endDate=2025-10-10&granularity=daily",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "features", ":featureId"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2025-01-01",
+                  "description": "Start date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2025-10-10",
+                  "description": "End date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "granularity",
+                  "value": "daily",
+                  "description": "hourly, daily, weekly, monthly"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "featureId",
+                  "value": "{{featureId}}",
+                  "description": "Feature ID"
+                }
+              ]
+            },
+            "description": "Get usage analytics for a specific feature"
+          }
+        },
+        {
+          "name": "Export Analytics",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportType\": \"feature_usage\",\n  \"format\": \"csv\",\n  \"dateRange\": {\n    \"start\": \"2025-01-01\",\n    \"end\": \"2025-10-10\"\n  },\n  \"email\": \"test@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/analytics/export",
+              "host": ["{{baseUrl}}"],
+              "path": ["analytics", "export"]
+            },
+            "description": "Export analytics data as CSV or JSON"
+          }
+        }
+      ],
+      "description": "Analytics and reporting endpoints"
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "List Webhooks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks"]
+            },
+            "description": "Get list of all registered webhooks"
+          }
+        },
+        {
+          "name": "Register Webhook",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Webhook registered successfully', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.id) {",
+                  "        pm.environment.set('webhookId', response.data.id);",
+                  "        console.log('Created webhook ID:', response.data.id);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"url\": \"https://your-app.com/webhooks/feature-fm\",\n  \"events\": [\n    \"feature.created\",\n    \"feature.updated\",\n    \"feature.toggled\",\n    \"feature.deleted\"\n  ],\n  \"active\": true,\n  \"retryPolicy\": {\n    \"maxRetries\": 3,\n    \"retryDelay\": 60\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks"]
+            },
+            "description": "Register a new webhook endpoint"
+          }
+        },
+        {
+          "name": "Get Webhook",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/:webhookId",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks", ":webhookId"],
+              "variable": [
+                {
+                  "key": "webhookId",
+                  "value": "{{webhookId}}",
+                  "description": "Webhook ID"
+                }
+              ]
+            },
+            "description": "Get details of a specific webhook"
+          }
+        },
+        {
+          "name": "Update Webhook",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"active\": false,\n  \"events\": [\n    \"feature.created\",\n    \"feature.deleted\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/:webhookId",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks", ":webhookId"],
+              "variable": [
+                {
+                  "key": "webhookId",
+                  "value": "{{webhookId}}",
+                  "description": "Webhook ID to update"
+                }
+              ]
+            },
+            "description": "Update an existing webhook"
+          }
+        },
+        {
+          "name": "Delete Webhook",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/:webhookId",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks", ":webhookId"],
+              "variable": [
+                {
+                  "key": "webhookId",
+                  "value": "{{webhookId}}",
+                  "description": "Webhook ID to delete"
+                }
+              ]
+            },
+            "description": "Delete a webhook"
+          }
+        }
+      ],
+      "description": "Webhook management endpoints"
+    },
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Check API health status (no authentication required)"
+          }
+        }
+      ],
+      "description": "System health and status endpoints"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Check if token is expiring soon (within 5 minutes)",
+          "const tokenExpiry = pm.environment.get('tokenExpirationTime');",
+          "if (tokenExpiry) {",
+          "    const timeLeft = tokenExpiry - Date.now();",
+          "    const minutesLeft = Math.floor(timeLeft / 60000);",
+          "    ",
+          "    if (timeLeft < 300000 && timeLeft > 0) {",
+          "        console.warn('⚠️ Token expiring in', minutesLeft, 'minutes - consider refreshing');",
+          "    } else if (timeLeft <= 0) {",
+          "        console.error('❌ Token expired - please run \"Get Access Token\" again');",
+          "    }",
+          "}",
+          "",
+          "// Log request for debugging",
+          "console.log(`Request: ${pm.request.method} ${pm.request.url.getPath()}`);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test: No server errors",
+          "pm.test('No server errors (5xx)', function () {",
+          "    pm.expect(pm.response.code).to.be.below(500);",
+          "});",
+          "",
+          "// Log response time",
+          "console.log(`Response time: ${pm.response.responseTime}ms`);",
+          "",
+          "// Handle authentication errors",
+          "if (pm.response.code === 401) {",
+          "    console.error('❌ Authentication failed - token may be expired');",
+          "    console.log('Run \"Get Access Token\" to obtain a new token');",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.sandbox-precise.digital",
+      "type": "default",
+      "description": "Sandbox API base URL"
+    },
+    {
+      "key": "apiKey",
+      "value": "3890d422-882b-486d-9de6-c106d9951094",
+      "type": "default",
+      "description": "Your sandbox API key"
+    },
+    {
+      "key": "secretKey",
+      "value": "mf1x4y13dgnqmcm3v9x7t9fucg7nozil",
+      "type": "secret",
+      "description": "Your sandbox secret key"
+    },
+    {
+      "key": "issuer",
+      "value": "sandbox-precise.digital",
+      "type": "default",
+      "description": "Token issuer"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "default",
+      "description": "JWT access token (auto-populated)"
+    },
+    {
+      "key": "tokenExpirationTime",
+      "value": "",
+      "type": "default",
+      "description": "Token expiration timestamp (auto-populated)"
+    },
+    {
+      "key": "featureId",
+      "value": "",
+      "type": "default",
+      "description": "Feature ID (auto-populated from List Features)"
+    },
+    {
+      "key": "newFeatureId",
+      "value": "",
+      "type": "default",
+      "description": "Newly created feature ID"
+    },
+    {
+      "key": "audienceId",
+      "value": "",
+      "type": "default",
+      "description": "Audience ID (auto-populated)"
+    },
+    {
+      "key": "newAudienceId",
+      "value": "",
+      "type": "default",
+      "description": "Newly created audience ID"
+    },
+    {
+      "key": "webhookId",
+      "value": "",
+      "type": "default",
+      "description": "Webhook ID (auto-populated)"
+    }
+  ]
+}
